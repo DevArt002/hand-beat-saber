@@ -1,0 +1,33 @@
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  background: black;
+}
+
+.statsContainer {
+  position: absolute;
+  bottom: 0px;
+  background: rgba(255, 255, 255, 0.5);
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  border-radius: 4px;
+  gap: 4px;
+}
+
+.rendererInfo {
+  font-size: 11px;
+  user-select: none;
+}
+
+.stats {
+  position: relative !important;
+}
