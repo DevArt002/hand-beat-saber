@@ -1,7 +1,9 @@
 import * as THREE from "three";
+import { XRControllerModelFactory } from "three/addons/webxr/XRControllerModelFactory.js";
+import { XRHandModelFactory } from "three/addons/webxr/XRHandModelFactory.js";
 
-import { GAME_EVENTS } from "../constants/index.js";
-import { StatsSystem } from "./systems/index.js";
+import { GAME_EVENTS, RIG_HEIGHT } from "../constants/index.js";
+import { RigSystem, StatsSystem } from "./systems/index.js";
 
 export default class Game extends THREE.EventDispatcher {
   // Essential renderer parameters
@@ -15,6 +17,10 @@ export default class Game extends THREE.EventDispatcher {
   #aspect = 1; // Camera aspect
   // Systems
   #statsSystem; // Stats
+  #rigSystem; // Rig
+  // Other
+  #controllerModelFactory = new XRControllerModelFactory();
+  #handModelFactory = new XRHandModelFactory();
 
   constructor(container) {
     super();
@@ -46,7 +52,7 @@ export default class Game extends THREE.EventDispatcher {
 
     // Initialize camera
     const camera = new THREE.PerspectiveCamera(45, this.#aspect, 0.1, 1000);
-    camera.position.set(0, 1, 0);
+    camera.position.set(0, RIG_HEIGHT, 0);
     scene.add(camera);
 
     // Initialize lights
@@ -100,6 +106,26 @@ export default class Game extends THREE.EventDispatcher {
     return this.#camera;
   }
 
+  // Getter of stats system
+  get statsSystem() {
+    return this.#statsSystem;
+  }
+
+  // Getter of rig system
+  get rigSystem() {
+    return this.#rigSystem;
+  }
+
+  // Getter of controller model factory
+  get controllerModelFactory() {
+    return this.#controllerModelFactory;
+  }
+
+  // Getter of hand model factory
+  get handModelFactory() {
+    return this.#handModelFactory;
+  }
+
   /**
    * Initialize
    */
@@ -108,6 +134,7 @@ export default class Game extends THREE.EventDispatcher {
     this.update = this.update.bind(this);
 
     await this.initStatsSystem();
+    await this.initRigSystem();
     this.#initEventListeners();
 
     this.dispatchEvent({ type: GAME_EVENTS.INITIALIZED });
@@ -119,6 +146,14 @@ export default class Game extends THREE.EventDispatcher {
   async initStatsSystem() {
     this.#statsSystem = new StatsSystem(this);
     await this.#statsSystem.init();
+  }
+
+  /**
+   * Initialize rig system
+   */
+  async initRigSystem() {
+    this.#rigSystem = new RigSystem(this);
+    await this.#rigSystem.init();
   }
 
   /**
@@ -169,12 +204,14 @@ export default class Game extends THREE.EventDispatcher {
     // Entered/Exited XR mode
     const isXRPresenting = this.#renderer.xr.isPresenting;
     this.#statsSystem?.onXRPresent(isXRPresenting);
+    this.#rigSystem?.onXRPresent(isXRPresenting);
 
     // Render scene
     this.render();
 
     // Update systems
     this.#statsSystem?.update();
+    this.#rigSystem?.update();
   }
 
   /**
@@ -193,6 +230,7 @@ export default class Game extends THREE.EventDispatcher {
     this.#renderer.domElement.remove(); // Remove the canvas
 
     // Dispose systems
-    this.#statsSystem.dispose(); // Dispose stats system
+    this.#statsSystem.dispose();
+    this.#rigSystem.dispose();
   }
 }
