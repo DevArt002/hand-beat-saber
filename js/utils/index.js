@@ -1,3 +1,5 @@
+import { XR_SESSION_SUPPORT_TYPE } from "../constants/index.js";
+
 // Dispose texture
 export function disposeTexture(texture) {
   texture?.dispose();
@@ -42,4 +44,26 @@ export function disposeObject(object) {
       disposeMaterial(material);
     }
   });
+}
+
+/**
+ * Get types of xr support
+ * @returns
+ */
+export async function getXRSupportTypes() {
+  const supportTypes = new Set();
+
+  if (navigator.xr) {
+    const [isVRSupported, isARSupported] = await Promise.all([
+      navigator.xr.isSessionSupported("immersive-vr"),
+      navigator.xr.isSessionSupported("immersive-ar"),
+    ]);
+
+    isVRSupported && supportTypes.add(XR_SESSION_SUPPORT_TYPE.SUPPORTED_VR);
+    isARSupported && supportTypes.add(XR_SESSION_SUPPORT_TYPE.SUPPORTED_AR);
+  } else {
+    supportTypes.add(XR_SESSION_SUPPORT_TYPE.NOT_FOUND);
+  }
+
+  return supportTypes;
 }

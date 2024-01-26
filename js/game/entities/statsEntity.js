@@ -38,7 +38,7 @@ export class StatsEntity extends Entity {
    */
   update(delta) {
     this.#statsMesh?.material.map?.update();
-    this._object3D._updateComponents(delta);
+    this._updateComponents(delta);
   }
 
   /**
@@ -47,6 +47,6 @@ export class StatsEntity extends Entity {
   dispose() {
     this.#statsMesh?.dispose();
     disposeObject(this._object3D);
-    this._object3D._disposeComponents();
+    this._disposeComponents();
   }
 }
