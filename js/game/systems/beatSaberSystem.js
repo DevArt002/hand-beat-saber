@@ -50,14 +50,19 @@ export class BeatSaberSystem extends System {
     return this.rigEntity?.handEntities ?? null;
   }
 
+  // Getter of sabers
+  get saberEntities() {
+    return [this.leftSaberEntity, this.rightSaberEntity];
+  }
+
   // Getter of left saber
-  get leftSaber() {
-    return this.rigEntity?.leftSaber ?? null;
+  get leftSaberEntity() {
+    return this.rigEntity?.leftSaberEntity ?? null;
   }
 
   // Getter of right saber
-  get rightSaber() {
-    return this.rigEntity?.rightSaber ?? null;
+  get rightSaberEntity() {
+    return this.rigEntity?.rightSaberEntity ?? null;
   }
 
   // Getter of note size

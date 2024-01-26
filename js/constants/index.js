@@ -45,6 +45,10 @@ export const ROTATION_BY_CUT_DIR = {
   [NOTE_CUT_DIR.Any]: 0,
 };
 
+export const COMPONENT_TYPE = {
+  COLLIDER: "collider",
+};
+
 export const RIG_HEIGHT = 1.6; // in meter
 
 export const HAND_HEIGHT = 1.2; // in meter

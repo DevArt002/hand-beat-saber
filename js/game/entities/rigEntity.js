@@ -45,13 +45,13 @@ export class RigEntity extends Entity {
   }
 
   // Getter of left saber
-  get leftSaber() {
-    return this.handEntities[0].saber;
+  get leftSaberEntity() {
+    return this.handEntities[0].saberEntity;
   }
 
   // Getter of right saber
-  get rightSaber() {
-    return this.handEntities[1].saber;
+  get rightSaberEntity() {
+    return this.handEntities[1].saberEntity;
   }
 
   /**

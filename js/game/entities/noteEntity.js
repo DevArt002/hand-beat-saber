@@ -1,5 +1,6 @@
 import * as THREE from "three";
 
+import { ColliderComponent } from "../components/index.js";
 import { Entity } from "./entity.js";
 import {
   HAND_INDEX,
@@ -11,7 +12,6 @@ import { getHexColorByNoteType } from "../../utils/index.js";
 export class NoteEntity extends Entity {
   #notesEntity; // Notes entity
   #index; // Index of instanced mesh
-  #colliderComponent; // Collier component
   #noteType = NOTE_TYPE.RED;
   #lineIndex = 0;
   #lineLayer = 0;
@@ -33,15 +33,13 @@ export class NoteEntity extends Entity {
     );
     this._object3D.visible = false;
 
-    // TODO
-    // // Add collider component
-    // const colliderComponent = new ColliderComponent(this);
-    // this.addComponent(colliderComponent);
-    // // Saber entities are collidable with notes
-    // colliderComponent.collidableEntities = new Set((saberEntities ?? []) as Entity<THREE.Mesh>[]);
-    // // Callback when collide
-    // colliderComponent.onCollide = this.onCollide;
-    // this._colliderComponent = colliderComponent;
+    // Add collider component
+    const colliderComponent = new ColliderComponent(this);
+    this.addComponent(colliderComponent);
+    // Saber entities are collidable with notes
+    colliderComponent.collidableEntities = new Set(saberEntities ?? []);
+    // Callback when collide
+    colliderComponent.onCollide = this.onCollide;
 
     this.#notesEntity = notesEntity;
     this.#index = index;
@@ -202,6 +200,9 @@ export class NoteEntity extends Entity {
    */
   onCollide = (entity) => {
     const { handIndex } = entity;
+
+    // Let interact with only saber
+    if (handIndex === undefined) return;
 
     // Stop playing this note
     this.stop();
