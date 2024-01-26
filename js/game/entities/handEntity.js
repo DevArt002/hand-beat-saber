@@ -4,15 +4,16 @@ import { Entity } from "./entity.js";
 import { HAND_INDEX } from "../../constants/index.js";
 
 export class HandEntity extends Entity {
-  #rigSystem;
+  #rigEntity;
   #handIndex; // Left or Right hand
   #size = [0.02, 0.02, 2]; // Saber size
+  #saber; // Saber
 
-  constructor(rigSystem, handIndex) {
+  constructor(rigEntity, handIndex) {
     super(new THREE.Group());
 
     const { renderer, controllerModelFactory, handModelFactory } =
-      rigSystem.game;
+      rigEntity.rigSystem.game;
     const controller = renderer.xr.getController(handIndex);
     const controllerGrip = renderer.xr.getControllerGrip(handIndex);
     controllerGrip.add(
@@ -24,13 +25,13 @@ export class HandEntity extends Entity {
     this._object3D.add(hand);
 
     const [w, h, d] = this.#size;
-    const saberMesh = new THREE.Mesh();
-    saberMesh.geometry = new THREE.BoxGeometry(w, h, d);
-    saberMesh.material = new THREE.MeshBasicMaterial({
+    const saber = new THREE.Mesh();
+    saber.geometry = new THREE.BoxGeometry(w, h, d);
+    saber.material = new THREE.MeshBasicMaterial({
       color: handIndex === HAND_INDEX.LEFT ? 0xff0000 : 0x0000ff,
     });
-    saberMesh.position.z -= d / 2;
-    controller.add(saberMesh);
+    saber.position.z -= d / 2;
+    controller.add(saber);
     this._object3D.add(controller);
 
     // TODO
@@ -38,11 +39,12 @@ export class HandEntity extends Entity {
     // this.addComponent(new ColliderComponent(this));
 
     this.#handIndex = handIndex;
+    this.#saber = saber;
   }
 
-  // Getter of rig system
-  get rigSystem() {
-    return this.#rigSystem;
+  // Getter of rig entity
+  get rigEntity() {
+    return this.#rigEntity;
   }
 
   // Getter of handIndex
@@ -53,5 +55,10 @@ export class HandEntity extends Entity {
   // Getter of size
   get size() {
     return this.#size;
+  }
+
+  // Getter of saber
+  get saber() {
+    return this.#saber;
   }
 }

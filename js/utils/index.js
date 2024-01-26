@@ -1,4 +1,4 @@
-import { XR_SESSION_SUPPORT_TYPE } from "../constants/index.js";
+import { NOTE_TYPE, XR_SESSION_SUPPORT_TYPE } from "../constants/index.js";
 
 // Dispose texture
 export function disposeTexture(texture) {
@@ -66,4 +66,14 @@ export async function getXRSupportTypes() {
   }
 
   return supportTypes;
+}
+
+/**
+ * Get color by note type
+ */
+export function getHexColorByNoteType(noteType) {
+  if (noteType === NOTE_TYPE.RED) return 0xff0000;
+  if (noteType === NOTE_TYPE.BLUE) return 0x0000ff;
+
+  return 0x000000;
 }

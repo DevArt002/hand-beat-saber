@@ -12,14 +12,15 @@ export class RigEntity extends Entity {
   constructor(rigSystem) {
     super(new THREE.Object3D());
 
+    this.#rigSystem = rigSystem;
+
     // Hand entities
-    const leftHand = new HandEntity(rigSystem, HAND_INDEX.LEFT);
-    const rightHand = new HandEntity(rigSystem, HAND_INDEX.RIGHT);
+    const leftHand = new HandEntity(this, HAND_INDEX.LEFT);
+    const rightHand = new HandEntity(this, HAND_INDEX.RIGHT);
     this._object3D.add(leftHand.object3D);
     this._object3D.add(rightHand.object3D);
 
     this.#handEntities = [leftHand, rightHand];
-    this.#rigSystem = rigSystem;
   }
 
   // Getter of rig system
@@ -40,6 +41,16 @@ export class RigEntity extends Entity {
   // Getter of right hand
   get rightHand() {
     return this.handEntities[1];
+  }
+
+  // Getter of left saber
+  get leftSaber() {
+    return this.handEntities[0].saber;
+  }
+
+  // Getter of right saber
+  get rightSaber() {
+    return this.handEntities[1].saber;
   }
 
   /**

@@ -2,8 +2,8 @@ import * as THREE from "three";
 import { XRControllerModelFactory } from "three/addons/webxr/XRControllerModelFactory.js";
 import { XRHandModelFactory } from "three/addons/webxr/XRHandModelFactory.js";
 
+import { BeatSaberSystem, RigSystem, StatsSystem } from "./systems/index.js";
 import { GAME_EVENTS, RIG_HEIGHT } from "../constants/index.js";
-import { RigSystem, StatsSystem } from "./systems/index.js";
 
 export default class Game extends THREE.EventDispatcher {
   // Essential renderer parameters
@@ -18,6 +18,7 @@ export default class Game extends THREE.EventDispatcher {
   // Systems
   #statsSystem; // Stats
   #rigSystem; // Rig
+  #beatSaberSystem; // Beat saber
   // Other
   #controllerModelFactory = new XRControllerModelFactory();
   #handModelFactory = new XRHandModelFactory();
@@ -135,6 +136,7 @@ export default class Game extends THREE.EventDispatcher {
 
     await this.initStatsSystem();
     await this.initRigSystem();
+    await this.initBeatSaberSystem();
     this.#initEventListeners();
 
     this.dispatchEvent({ type: GAME_EVENTS.INITIALIZED });
@@ -157,10 +159,19 @@ export default class Game extends THREE.EventDispatcher {
   }
 
   /**
+   * Initialize beatsaber system
+   */
+  async initBeatSaberSystem() {
+    this.#beatSaberSystem = new BeatSaberSystem(this);
+    await this.#beatSaberSystem.init();
+  }
+
+  /**
    * Play game
    */
   play() {
     this.#renderer.setAnimationLoop(this.update);
+    this.#beatSaberSystem.play();
   }
 
   /**
@@ -168,6 +179,7 @@ export default class Game extends THREE.EventDispatcher {
    */
   stop() {
     this.#renderer.setAnimationLoop(null);
+    this.#beatSaberSystem.stop();
   }
 
   /**
@@ -205,6 +217,7 @@ export default class Game extends THREE.EventDispatcher {
     const isXRPresenting = this.#renderer.xr.isPresenting;
     this.#statsSystem?.onXRPresent(isXRPresenting);
     this.#rigSystem?.onXRPresent(isXRPresenting);
+    this.#beatSaberSystem?.onXRPresent(isXRPresenting);
 
     // Render scene
     this.render();
@@ -212,6 +225,7 @@ export default class Game extends THREE.EventDispatcher {
     // Update systems
     this.#statsSystem?.update();
     this.#rigSystem?.update();
+    this.#beatSaberSystem?.update();
   }
 
   /**
@@ -232,5 +246,6 @@ export default class Game extends THREE.EventDispatcher {
     // Dispose systems
     this.#statsSystem.dispose();
     this.#rigSystem.dispose();
+    this.#beatSaberSystem.dispose();
   }
 }

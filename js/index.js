@@ -31,8 +31,6 @@ game.init();
 const onGameInitialized = () => {
   enterXRBtn.className = "enabled";
   playBtn.className = "enabled";
-  // TODO
-  game.play();
 };
 
 // Listener when xr session is ended
@@ -84,8 +82,14 @@ const onRequestXRSession = async () => {
   await navigator.xr.requestSession(mode, options).then(onXRSessionStarted);
 };
 
+// Listener when play button is clicked
+const onRequestPlay = () => {
+  game.play();
+};
+
 /**
  * Event listeners
  */
 game.addEventListener(GAME_EVENTS.INITIALIZED, onGameInitialized);
-enterXRBtn.addEventListener("click", onRequestXRSession);
+enterXRBtn.addEventListener("pointerup", onRequestXRSession);
+playBtn.addEventListener("pointerup", onRequestPlay);
