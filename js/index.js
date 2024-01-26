@@ -84,7 +84,13 @@ const onRequestXRSession = async () => {
 
 // Listener when play button is clicked
 const onRequestPlay = () => {
-  game.play();
+  if (game.isPlaying) {
+    game.stop();
+    playBtn.innerText = "Play";
+  } else {
+    game.play();
+    playBtn.innerText = "Stop";
+  }
 };
 
 /**

@@ -23,6 +23,9 @@ export class ScoreEntity extends Entity {
     this.#dom.style.justifyContent = "center";
     this.#dom.style.alignItems = "center";
     this.#dom.style.borderRadius = "4px";
+    this.#dom.style.position = "absolute";
+    this.#dom.style.top = "0";
+    this.#dom.style.zIndex = "-1";
     this.#dom.innerText = `${this.#score}`;
     container.appendChild(this.#dom);
     const scoreMesh = new HTMLMesh(this.#dom);

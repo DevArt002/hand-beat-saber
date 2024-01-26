@@ -117,6 +117,16 @@ export default class Game extends THREE.EventDispatcher {
     return this.#rigSystem;
   }
 
+  // Getter of beatsaber system
+  get beatSaberSystem() {
+    return this.#beatSaberSystem;
+  }
+
+  // Getter of playing status
+  get isPlaying() {
+    return this.#beatSaberSystem?.isPlaying || false;
+  }
+
   // Getter of controller model factory
   get controllerModelFactory() {
     return this.#controllerModelFactory;

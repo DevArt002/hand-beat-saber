@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { Entity } from "./entity.js";
-import { HAND_INDEX } from "../../constants/index.js";
+import { HAND_HEIGHT, HAND_INDEX } from "../../constants/index.js";
 import { HandEntity } from "./handEntity.js";
 import { disposeObject } from "../../utils/index.js";
 
@@ -19,6 +19,7 @@ export class RigEntity extends Entity {
     const rightHand = new HandEntity(this, HAND_INDEX.RIGHT);
     this._object3D.add(leftHand.object3D);
     this._object3D.add(rightHand.object3D);
+    this._object3D.position.y = HAND_HEIGHT;
 
     this.#handEntities = [leftHand, rightHand];
   }
